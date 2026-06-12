@@ -1,36 +1,46 @@
+using MarketplaceSample.Application;
+using MarketplaceSample.Infrastructure;
+using MarketplaceSample.Infrastructure.Database;
+using Microsoft.OpenApi.Models;
 
-namespace MarketplaceSample.Api
+namespace MarketplaceSample.Api;
+
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddApplicationServices();
+        builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddAutoMapper(typeof(Program));
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(s =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            s.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+        });
 
-            // Add services to the container.
+        var app = builder.Build();
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
+            app.UseHsts();
         }
+
+        await app.InitializeDatabaseAsync();
+
+        app.UseHealthChecks("/health");
+
+        //app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
 }

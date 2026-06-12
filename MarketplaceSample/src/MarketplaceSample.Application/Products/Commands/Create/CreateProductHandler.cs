@@ -22,7 +22,7 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, long>
             ImageUrl = request.ImageUrl
         };
 
-        await _productRepository.Insert(product);
+        await _productRepository.InsertAsync(product);
 
         return product.Id;
     }

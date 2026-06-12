@@ -4,5 +4,7 @@ namespace MarketplaceSample.Application.Common.Interfaces;
 
 public interface IProductRepository 
 {
-    Task<long> Insert(Product product);
+    Task<long> InsertAsync(Product product);
+
+    Task<IEnumerable<Product>> GetAllAsync();
 }
