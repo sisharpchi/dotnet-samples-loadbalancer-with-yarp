@@ -1,2 +1,2 @@
-# dotnet-samples-with-loadbalancer
-dotnet samples with L7 loadbalancer
+# dotnet-samples-loadbalancer-with-yarp
+dotnet samples loadbalancer (L7) with YARP
