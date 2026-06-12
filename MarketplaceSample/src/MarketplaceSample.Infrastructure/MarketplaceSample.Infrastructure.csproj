@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MarketplaceSample.Application\MarketplaceSample.Application.csproj" />
     <ProjectReference Include="..\MarketplaceSample.Domain\MarketplaceSample.Domain.csproj" />
   </ItemGroup>
 

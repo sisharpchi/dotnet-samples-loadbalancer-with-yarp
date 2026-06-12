@@ -1,12 +1,14 @@
-﻿using MarketplaceSample.Domain.Entities;
+﻿using MarketplaceSample.Application.Common.Interfaces;
+using MarketplaceSample.Domain.Entities;
 using MarketplaceSample.Infrastructure.Database;
 
 namespace MarketplaceSample.Infrastructure.Products;
 
 internal class ProductRepository(ApplicationDbContext dbContext) : IProductRepository
 {
-    public void Insert(Product product)
+    public async Task<long> Insert(Product product)
     {
-        dbContext.Products.Add(product);
+        await dbContext.Products.AddAsync(product);
+        return product.Id;
     }
 }

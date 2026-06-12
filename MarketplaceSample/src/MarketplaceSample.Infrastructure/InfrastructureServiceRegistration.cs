@@ -1,4 +1,5 @@
-﻿using MarketplaceSample.Infrastructure.Database;
+﻿using MarketplaceSample.Application.Common.Interfaces;
+using MarketplaceSample.Infrastructure.Database;
 using MarketplaceSample.Infrastructure.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

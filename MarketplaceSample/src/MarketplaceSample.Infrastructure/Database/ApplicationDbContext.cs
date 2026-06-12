@@ -1,4 +1,5 @@
-﻿using MarketplaceSample.Domain.Entities;
+﻿using MarketplaceSample.Application.Common.Interfaces;
+using MarketplaceSample.Domain.Entities;
 using MarketplaceSample.Infrastructure.Products;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
