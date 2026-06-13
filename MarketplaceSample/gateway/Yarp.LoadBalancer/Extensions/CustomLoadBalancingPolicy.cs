@@ -9,11 +9,17 @@ public class CustomLoadBalancingPolicy : ILoadBalancingPolicy
 
     public DestinationState? PickDestination(HttpContext context, ClusterState cluster, IReadOnlyList<DestinationState> availableDestinations)
     {
+        if (availableDestinations.Count == 0)
+        {
+            return null;
+        }
+
         context.Request.Headers.TryGetValue("destination", out var destination);
         if (availableDestinations.Any(d => d.DestinationId == destination))
         {
             return availableDestinations.First(d => d.DestinationId == destination);
         }
+
         return availableDestinations[0];
     }
 }

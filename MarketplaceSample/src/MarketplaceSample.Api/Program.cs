@@ -1,7 +1,9 @@
 using MarketplaceSample.Api.Extensions;
+using MarketplaceSample.Api.Health;
 using MarketplaceSample.Application;
 using MarketplaceSample.Infrastructure;
 using MarketplaceSample.Infrastructure.Database;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 
@@ -19,7 +21,9 @@ public class Program
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddControllers();
         builder.Services.AddAuthorization();
-        builder.Services.AddHealthChecks();
+        builder.Services.AddHealthChecks()
+            .AddCheck<ConfigurableLivenessHealthCheck>("live", tags: ["live"])
+            .AddCheck<ConfigurableReadinessHealthCheck>("ready", tags: ["ready"]);
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(s =>
         {
@@ -63,6 +67,14 @@ public class Program
         await app.InitializeDatabaseAsync();
 
         app.UseHealthChecks("/health");
+        app.UseHealthChecks("/health/live", new HealthCheckOptions
+        {
+            Predicate = registration => registration.Tags.Contains("live")
+        });
+        app.UseHealthChecks("/health/ready", new HealthCheckOptions
+        {
+            Predicate = registration => registration.Tags.Contains("ready")
+        });
 
         //app.UseHttpsRedirection();
 

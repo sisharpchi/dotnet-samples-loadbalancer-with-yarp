@@ -1,4 +1,6 @@
 using Yarp.LoadBalancer.Extensions;
+using Yarp.LoadBalancer.LoadBalancing;
+using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.LoadBalancing;
 
 namespace Yarp.LoadBalancer;
@@ -13,8 +15,14 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddSingleton<ILoadBalancingPolicy, CustomLoadBalancingPolicy>();
-        builder.Services.AddReverseProxy()
-            .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+        builder.Services.Configure<DynamicLoadBalancerOptions>(
+            builder.Configuration.GetSection(DynamicLoadBalancerOptions.SectionName));
+        builder.Services.AddSingleton<DestinationHealthStore>();
+        builder.Services.AddSingleton<DynamicProxyConfigProvider>();
+        builder.Services.AddSingleton<IProxyConfigProvider>(sp => sp.GetRequiredService<DynamicProxyConfigProvider>());
+        builder.Services.AddHttpClient("load-balancer-health");
+        builder.Services.AddHostedService<DestinationHealthMonitor>();
+        builder.Services.AddReverseProxy();
 
         builder.Services.AddHealthChecks();
 
@@ -25,8 +33,6 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
-        app.UseHttpsRedirection();
 
         app.UseAuthorization();
 
