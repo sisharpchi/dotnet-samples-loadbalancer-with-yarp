@@ -1,0 +1,6 @@
+services:
+  marketplacesample.api:
+    image: ${DOCKER_REGISTRY-}marketplacesampleapi
+    build:
+      context: .
+      dockerfile: src/MarketplaceSample.Api/Dockerfile
