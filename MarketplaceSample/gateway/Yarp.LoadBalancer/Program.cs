@@ -1,3 +1,6 @@
+using Yarp.LoadBalancer.Extensions;
+using Yarp.ReverseProxy.LoadBalancing;
+
 namespace Yarp.LoadBalancer;
 
 public class Program
@@ -9,7 +12,7 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-
+        builder.Services.AddSingleton<ILoadBalancingPolicy, CustomLoadBalancingPolicy>();
         builder.Services.AddReverseProxy()
             .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 

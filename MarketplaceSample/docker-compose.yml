@@ -26,7 +26,7 @@ services:
     build:
       context: .
       dockerfile: src/MarketplaceSample.Api/Dockerfile
-    depends_on:
+    depends_on: 
       marketplace.db:
         condition: service_healthy
 
