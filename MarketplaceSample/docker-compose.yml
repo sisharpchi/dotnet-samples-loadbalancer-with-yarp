@@ -1,6 +1,43 @@
 services:
-  marketplacesample.api:
+  yarp.loadbalancer:
+    image: ${DOCKER_REGISTRY-}yarploadbalancer
+    build:
+      context: .
+      dockerfile: gateway/Yarp.LoadBalancer/Dockerfile
+    depends_on:
+      marketplacesample.api1:
+        condition: service_started
+      marketplacesample.api2:
+        condition: service_started
+      marketplacesample.api3:
+        condition: service_started
+
+  marketplacesample.api1:
     image: ${DOCKER_REGISTRY-}marketplacesampleapi
     build:
       context: .
       dockerfile: src/MarketplaceSample.Api/Dockerfile
+    depends_on:
+      marketplace.db:
+        condition: service_healthy
+
+  marketplacesample.api2:
+    image: ${DOCKER_REGISTRY-}marketplacesampleapi
+    build:
+      context: .
+      dockerfile: src/MarketplaceSample.Api/Dockerfile
+    depends_on:
+      marketplace.db:
+        condition: service_healthy
+
+  marketplacesample.api3:
+    image: ${DOCKER_REGISTRY-}marketplacesampleapi
+    build:
+      context: .
+      dockerfile: src/MarketplaceSample.Api/Dockerfile
+    depends_on:
+      marketplace.db:
+        condition: service_healthy
+
+  marketplace.db:
+    image: postgres:16
