@@ -1,12 +1,15 @@
-﻿using MarketplaceSample.Application.Products.Commands.Create;
+using MarketplaceSample.Application.Products.Commands.Create;
 using MarketplaceSample.Application.Products.Queries.GetAll;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenIddict.Validation.AspNetCore;
 
 namespace MarketplaceSample.Api.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class ProductsController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
@@ -22,5 +25,4 @@ public class ProductsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new GetAllProductQuery());
         return Ok(result);
     }
-
 }

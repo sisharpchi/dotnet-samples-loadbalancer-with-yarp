@@ -1,14 +1,14 @@
-﻿using MarketplaceSample.Application.Common.Interfaces;
+using MarketplaceSample.Application.Common.Interfaces;
 using MarketplaceSample.Domain.Entities;
+using MarketplaceSample.Domain.Entities.Identity;
 using MarketplaceSample.Infrastructure.Products;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
 
 namespace MarketplaceSample.Infrastructure.Database;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), IApplicationDbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
 {
     public DbSet<Product> Products => Set<Product>();
 
